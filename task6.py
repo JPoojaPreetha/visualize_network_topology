@@ -1,16 +1,17 @@
+'''
+input: log-file
+output : visualization of the network
+'''
 import copy
 import re
 import datetime
-import copy
 import configuration as conf
-import re
 
 import matplotlib.dates as md
 import matplotlib.pyplot as plt
 from datetime import datetime
 import math
 import time
-import copy
 
 
 def picrep(fname):
@@ -18,6 +19,7 @@ def picrep(fname):
     lines=f1.readlines()
     f2=open("tm.txt","w+")
     c=False
+    #open the file and pick lines that are necessary for network visualization
     for i in lines:
         if "-- ME:" in i:
             c=True
@@ -42,6 +44,7 @@ def picrep(fname):
     rel=[]
     ups=[]
     j=1
+    #slicing the previously processed lines to get satellite address,its relation and to which device it is connected
     for i in line:
         i=i.strip()
         if re.match(r"^#"+str(j)+": QCA IEEE .*",i):
@@ -51,7 +54,7 @@ def picrep(fname):
                 rel.append(i[10:25])
         elif re.match(r"^Upstream Device:.*",i)and "Upstream Device: None" not in i:
                 ups.append(i[17:34])
-
+    #printing the contents of list in required format
     for i in range(n):
         if rel[i]=="Direct Neighbor" and sat[i] not in ups:
             print(ip+"(Router) <----- "+sat[i]+"(Satellite "+str(i+1)+")")
